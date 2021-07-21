@@ -1,0 +1,49 @@
+package args
+
+import (
+	"encoding/json"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestNewSlideArgs(t *testing.T) {
+
+	t.Run("empty map", func(t *testing.T) {
+
+		mapExpected := map[string]interface{}{}
+		expected, _ := json.Marshal(mapExpected)
+
+		args := NewSlideArgs()
+
+		result, err := json.Marshal(args.ToMap())
+		if err != nil {
+			t.Error(err)
+		}
+
+		assert.Equal(t, string(expected), string(result))
+	})
+
+	t.Run("with options", func(t *testing.T) {
+
+		theme := "bright"
+		engine := "poppler"
+		mapExpected := map[string]interface{}{
+			"theme":  theme,
+			"engine": engine,
+		}
+		expected, _ := json.Marshal(mapExpected)
+
+		args := NewSlideArgs()
+		args.SetTheme(theme)
+		args.SetEngine(engine)
+
+		result, err := json.Marshal(args.ToMap())
+		if err != nil {
+			t.Error(err)
+		}
+
+		assert.Equal(t, string(expected), string(result))
+	})
+
+}
